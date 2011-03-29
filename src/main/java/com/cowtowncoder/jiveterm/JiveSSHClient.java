@@ -22,7 +22,7 @@ Changes:
 
 **************************************/
 
-package jiveterm;
+package com.cowtowncoder.jiveterm;
 
 import java.io.*;
 import java.net.*;

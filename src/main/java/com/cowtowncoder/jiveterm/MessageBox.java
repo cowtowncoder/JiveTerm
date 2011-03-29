@@ -24,7 +24,7 @@ Last changed:
 
 **************************************/
 
-package jiveterm;
+package com.cowtowncoder.jiveterm;
 
 import java.awt.*;
 import java.awt.event.*;

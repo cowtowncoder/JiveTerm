@@ -62,18 +62,16 @@ Changes:
 
 ************************************************************/
 
-package jiveterm;
+package com.cowtowncoder.jiveterm;
 
-import java.util.*;
-import java.io.*;
-import java.net.*;
 import java.awt.*;
 import java.awt.image.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.applet.Applet;
-
-import jiveterm.*;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
 /*******************************************************
 Class that implements the "output window" of the client:
@@ -325,11 +323,11 @@ final class Display
 
     /* *** Mode changes: *** */
 
-/*************************************
+    /*************************************
 
- Functions for changing various modes: 
+     Functions for changing various modes: 
 
-*************************************/
+    *************************************/
 
     // Can query one or more modes; has to have all on to return true:
     public final boolean displayMode(int mode)
@@ -337,10 +335,10 @@ final class Display
 	return (mDisplayModes & mode) == mode;
     }
 
-    public final boolean getDisplayModes() { return mDisplayModes; }
+    public final int getDisplayModes() { return mDisplayModes; }
     public final boolean getDisplayMode(int mode)
     {
-	return (mDisplayModes & mode);
+	return (mDisplayModes & mode) != 0;
     }
 
     // Returns true if screen was redrawn
@@ -366,10 +364,9 @@ final class Display
     }
 
     // Returns true if screen was redrawn:
-    public boolean setDisplayMode(int mode, boolean state)
+    public boolean setDisplayMode(int modes, boolean state)
     {
-	
-	if (mode) {
+	if (state) {
 	    return setDisplayModes(mDisplayModes | modes);
 	} 
 	return setDisplayModes(mDisplayModes & ~modes);
@@ -440,7 +437,7 @@ final class Display
 
     public void resetCharAttrs()
     {
-	mCharAttrs = sDefCharAttrs;
+	mCharAttrs = mDefaultCharAttrs;
     }
     
     /* *** Then the effects that apply to the whole line (row): * ***/
@@ -879,7 +876,7 @@ final class Display
     private void clearHorizontal(int row, int left, int right)
     {
 	int y = getPixelY(row);
-	screenGraphics.setColor(mDefCharAttrs.getBackground());
+	screenGraphics.setColor(mDefaultCharAttrs.getBackground());
 	if (mLines[row].isDoubleWidth()) {
 	    screenGraphics.fillRect(left * fontWidth * 2, y,
 				    (left - right + 1) * fontWidth * 2,
@@ -1218,9 +1215,6 @@ final class Display
     // Wonder how should bell be indicated... Beep, flash?
     public void printBell()
     {
-	if (dumpText) {
-	    doWarningLF("DEBUG: <Bell>"); 
-	} 
 	if (allowBell) {
 	    Toolkit.getDefaultToolkit().beep();
 	}
@@ -1595,7 +1589,7 @@ final class Display
       }
 
       coords.x = getPixelX();
-      coords y = getPixelY(mCurrRow);
+      coords.y = getPixelY(mCurrRow);
       coords.width = len * fontWidth;
       coords.height = fontHeight;
       mCurrAttrs.paintText(c, first, len, coords, fontBase,
@@ -2055,7 +2049,7 @@ final class Display
 
     public void scrollScreenLeft(int count)
     {
-      for (int i = topRow; i <= bottomRow; ++i) {
+      for (int i = mTopRow; i <= mBottomRow; ++i) {
 	  mLines[i].scrollLeft(count);
 	  redrawRow(i, 0);
       }
@@ -2063,7 +2057,7 @@ final class Display
 
     public void scrollScreenRight(int count)
     {
-      for (int i = topRow; i <= bottomRow; ++i) {
+      for (int i = mTopRow; i <= mBottomRow; ++i) {
 	  mLines[i].scrollRight(count, sizeInCharsW);
 	  redrawRow(i, 0);
       }
@@ -2235,9 +2229,9 @@ Display.sshDebug();
       x = pixelSize.width;
       y = pixelSize.height;
       
-      g.setColor(defFgroundColor);
+      g.setColor(DEFAULT_FG);
       g.drawRect(0, 0, x - 1, y - 1);
-      g.setColor(defBgroundColor);
+      g.setColor(DEFAULT_BG);
       g.drawRect(1, 1, x - 3, y - 3);
       
       x -= 2 * BORDER_X;
@@ -3683,7 +3677,7 @@ Display.sshDebug();
 	 {
 	     int last = mLength;
 	     int baseX = coords.x;
-	     Font currFont = 0;
+	     Font currFont = null;
 
 	     for (int i = 0; i < last; ) {
 		 /* Are we still supposed to have ctrl chars here?

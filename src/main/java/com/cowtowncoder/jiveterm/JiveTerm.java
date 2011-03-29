@@ -33,7 +33,7 @@ Changes:
 
 **************************************/
 
-package jiveterm;
+package com.cowtowncoder.jiveterm;
 
 import java.util.*;
 import java.io.*;

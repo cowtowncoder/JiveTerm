@@ -26,7 +26,7 @@ Changes:
 
 **************************************/
 
-package jiveterm;
+package com.cowtowncoder.jiveterm;
 
 import java.awt.Color;
 
