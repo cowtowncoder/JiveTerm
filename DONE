@@ -1,0 +1,37 @@
+25-Feb-99, TSa:
+  - Slow-down system rewritten; moved from Display to Terminal. Works
+    more reliably; 'only' ~10 - 15% slower than the comparable abstract
+    terminal. Speed is calculated assuming 8-N-1 transfer, in effect
+    leading to 9 bits per char. Would be fun to compare the speed to
+    a real VT-terminal...
+03-Mar-99, TSa:
+  - Drawing of the lines that have blinking characters rewritten. Now
+    blinking works well also when drawing (like in VT-animations); not just
+    when the screen is static like before
+29-Mar-99, TSa:
+  - Fixed two small bugs:
+    o Wasn't sending telnet-initialization stuff (NAWS not working);
+      code was commented out... :-)
+    o Filtered bare LFs out (assuming telnet always sends NVT-linefeeds,
+      ie. \r\n), and Pine at least had problems with that.
+    Thanks to Mats Anderson (author of MindTerm) for pointing out the
+    problems with Pine.
+15-Apr-99, TSa:
+  - Due to platform-specific incompabilities (Win95 JDK vs. Linux JDK),
+    added new class, PlatformSpecific. It is used by other classes to
+    get certain platform-dependant values and object instances, when
+    they differ on various platforms. For example:
+
+    o Graphics.setXORMode(c); c needs to be different on Win95 JDK
+      than on Linux JDK, at least when drawing the cursor.
+    o Font widths are reported incorrectly on Win95 JDK it seems;
+      the reported width needs to be halved (actually, w = (w / 2) -1)
+      before it can be used for calculation!
+    o Number of Image-instances AWT is allowed to create appears to be
+      rather low on Win95; thus, different strategy needs to be used
+      when creating doubled characters and special symbols. On
+      X-windows systems, the size of distinct character image is being
+      kept small, which means that the number of Images is larger.
+      On MS-Windows this is not possible ("OutOfMemory" reports JDK...),
+      and thus we need to cram more chars per image.
+
