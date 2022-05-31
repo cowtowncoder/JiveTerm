@@ -88,7 +88,7 @@ implements Runnable
   //           -> Greater/equal > + =
   //           -> Pi symbol
   //           -> Not equal = plus /
-  //           -> UK pound symbol (£)
+  //           -> UK pound symbol ( )
   // 0176 (126) -> Centered dot
 
   int group = 1;

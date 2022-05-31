@@ -50,8 +50,7 @@ implements JiveConnection
     * UnknowHostException.
     */
   public SSHConnection(JiveTerm master, String host, int port)
-  )
-  throws UnknownHostException
+    throws UnknownHostException
   {
       super(false, false);
       jiveterm = master;
